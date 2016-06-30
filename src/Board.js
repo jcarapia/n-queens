@@ -79,11 +79,32 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      
+      var rowArray = this.get(rowIndex);
+      console.log('row',rowArray)
+
+      var sum = rowArray.reduce(function(a, b) { return a + b; }, 0);
+      //console.log('sum',sum)
+      
+      if(sum > 1){
+        return true;
+      }else{
+
       return false; // fixme
+      }
+
     },
+
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      var rows = this.get('n');
+      for(var i = 0; i < rows; i++){
+        if(this.hasRowConflictAt([i])){
+          return true
+        } 
+      }
+      
       return false; // fixme
     },
 
@@ -94,13 +115,51 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var colArray = [];
+      var columns = this.get('n');
+      for(var i = 0; i < columns; i++){
+        //console.log(this.get[i])
+        colArray.push(this.get(i)[colIndex]);
+      }
+      var sum = colArray.reduce(function(a, b) { return a + b; }, 0);
+
+      if(sum > 1){
+        return true;
+      } else {
+        return false; // fixme
+      }
+      
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+
+      var rowsArray = this.rows();
+      //console.log(rows);
+      var columns = this.get('n');
+      //console.log(columns)
+
+      for(var i = 0; i < columns; i++){
+        var colArray = [];
+        for(var j = 0; j < rowsArray.length; j++){
+          //console.log('col value',this.get[j])
+          colArray.push(rowsArray[j][i]);
+        }
+        var sum = colArray.reduce(function(a, b) { return a + b; }, 0);
+            if(sum > 1){
+              return true;
+          } 
+      }
+
       return false; // fixme
     },
+
+// var array = ["ABCD","EFGH","IJKL"];
+
+    
+
+
+
 
 
 
@@ -109,13 +168,54 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      console.log(majorDiagonalColumnIndexAtFirstRow)
       return false; // fixme
+
+
+     
+
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
-    },
+
+
+     function diagonal(array, bottomToTop) {
+        var Xlength = array.length;
+        var Ylength = array[0].length;
+        var maxLength = Math.max(Xlength, Ylength);
+        var temp;
+        var returnArray = [];
+        for (var k = 0; k <= 2 * (maxLength - 1); ++k) {
+          temp = [];
+          for (var y = Ylength - 1; y >= 0; --y) {
+            var x = k - (bottomToTop ? Ylength - y : y);
+            if (x >= 0 && x < Xlength) {
+              temp.push(array[y][x]);
+            }
+          }
+            if(temp.length > 0) {
+              returnArray.push(temp);
+            }
+        }
+      return returnArray;
+    }
+
+    var minorDiagonalArrays = diagonal(this.rows(), true)
+
+    console.log(minorDiagonalArrays);
+
+    for(var i = 0; i < minorDiagonalArrays.length; i++){
+      console.log(minorDiagonalArrays[i]);
+
+      var sum = minorDiagonalArrays[i].reduce(function(a, b) { return a + b; }, 0);
+      console.log(sum)
+       if(sum > 1){
+            return true;
+        }
+      }
+      return false;
+  },
 
 
 
@@ -124,13 +224,76 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+
+    // var columns = this.get('n');
+    // var rows = this.get('n');
+    // //var maxLength = Math.max(Xlength, Ylength);
+    // var diagArray;
+    // for (var k = 0; k <= 2 * (this.get('n') - 1); ++k) {
+
+    //     diagArray = [];
+
+    //     for (var y = rows - 1; y >= 0; --y) {
+    //         var x = k - y;
+    //         if (x >= 0 && x < columns) {
+    //             diagArray.push(this.get(y)[x]);
+    //         }
+    //     } 
+    // var sum = diagArray.reduce(function(a, b) { return a + b; }, 0);
+    //     if(sum > 1){
+    //             return true;
+    //         }
+    //   }
+
+    // return false;
+    
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+
+    function diagonal(array, bottomToTop) {
+        var Xlength = array.length;
+        var Ylength = array[0].length;
+        var maxLength = Math.max(Xlength, Ylength);
+        var temp;
+        var returnArray = [];
+        for (var k = 0; k <= 2 * (maxLength - 1); ++k) {
+          temp = [];
+          for (var y = Ylength - 1; y >= 0; --y) {
+            var x = k - (bottomToTop ? Ylength - y : y);
+            if (x >= 0 && x < Xlength) {
+              temp.push(array[y][x]);
+            }
+          }
+            if(temp.length > 0) {
+              returnArray.push(temp);
+            }
+        }
+      return returnArray;
     }
+
+
+
+
+    var majorDiagonalArrays = diagonal(this.rows())
+
+    //console.log(majorDiagonalArrays);
+
+    for(var i = 0; i < majorDiagonalArrays.length; i++){
+      //console.log(minorDiagonalArrays[i]);
+
+      var sum = majorDiagonalArrays[i].reduce(function(a, b) { return a + b; }, 0);
+      console.log(sum)
+       if(sum > 1){
+            return true;
+        }
+      }
+      return false;
+  },
+
+
+
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
